@@ -1,0 +1,60 @@
+version: '3.8'
+
+services:
+  # 主应用服务
+  app:
+    build: .
+    ports:
+      - "7860:7860"
+    environment:
+      - GRADIO_SERVER_NAME=0.0.0.0
+      - GRADIO_SERVER_PORT=7860
+    volumes:
+      - ./logs:/app/logs
+      - ./config:/app/config
+    command: python src/main.py run logging_demo
+    restart: unless-stopped
+
+  # 开发环境服务
+  app-dev:
+    build: 
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - "7861:7860"
+    environment:
+      - GRADIO_SERVER_NAME=0.0.0.0
+      - GRADIO_SERVER_PORT=7860
+      - PYTHONPATH=/app
+    volumes:
+      - .:/app
+      - ./logs:/app/logs
+    command: python src/main.py run logging_demo
+    profiles:
+      - dev
+
+  # 测试服务
+  app-test:
+    build: .
+    environment:
+      - PYTHONPATH=/app
+    volumes:
+      - .:/app
+    command: pytest tests/ -v
+    profiles:
+      - test
+
+  # 代码质量检查服务
+  lint:
+    build: .
+    volumes:
+      - .:/app
+    command: |
+      sh -c "
+        flake8 src/ tests/ --count --select=E9,F63,F7,F82 --show-source --statistics &&
+        black --check src/ tests/ &&
+        isort --check-only src/ tests/ &&
+        mypy src/
+      "
+    profiles:
+      - lint 

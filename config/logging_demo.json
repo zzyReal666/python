@@ -1,0 +1,18 @@
+{
+    "app": {
+        "name": "logging_demo",
+        "description": "Python 日志模块演示",
+        "version": "1.0.0"
+    },
+    "logging": {
+        "level": "INFO",
+        "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+        "date_format": "%Y-%m-%d %H:%M:%S",
+        "log_dir": "logs"
+    },
+    "gradio": {
+        "port": 7862,
+        "share": false,
+        "debug": true
+    }
+} 
