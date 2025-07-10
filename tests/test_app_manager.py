@@ -1,7 +1,9 @@
 """应用管理器测试模块"""
 
-import pytest
 from unittest.mock import Mock, patch
+
+import pytest
+
 from src.core.app_manager import AppManager
 from src.core.base_app import BaseApp
 
@@ -19,12 +21,12 @@ class TestAppManager:
         mock_app = Mock(spec=BaseApp)
         mock_app.name = "test_app"
         mock_app.description = "Test application"
-        
-        with patch('src.core.app_manager.importlib.import_module') as mock_import:
+
+        with patch("src.core.app_manager.importlib.import_module") as mock_import:
             mock_module = Mock()
             mock_module.TestApp = mock_app
             mock_import.return_value = mock_module
-            
+
             apps = self.app_manager.discover_apps()
             assert len(apps) >= 0  # 至少应该发现日志演示应用
 
@@ -43,16 +45,16 @@ class TestAppManager:
 
     def test_run_app_success(self):
         """测试成功运行应用"""
-        with patch('src.core.app_manager.importlib.import_module') as mock_import:
+        with patch("src.core.app_manager.importlib.import_module") as mock_import:
             mock_app_class = Mock()
             mock_app_instance = Mock()
             mock_app_class.return_value = mock_app_instance
             mock_import.return_value = Mock(LoggingDemoApp=mock_app_class)
-            
+
             result = self.app_manager.run_app("logging_demo")
             assert result is True
 
     def test_run_app_not_found(self):
         """测试运行不存在的应用"""
         result = self.app_manager.run_app("non_existent_app")
-        assert result is False 
+        assert result is False

@@ -1,7 +1,9 @@
 """日志演示应用测试模块"""
 
-import pytest
 from unittest.mock import Mock, patch
+
+import pytest
+
 from src.apps.logging_demo import LoggingDemoApp
 
 
@@ -63,4 +65,4 @@ class TestLoggingDemoApp:
     def test_log_management(self):
         """测试日志管理功能"""
         result = self.app.log_management("查看日志")
-        assert "日志" in result 
+        assert "日志" in result

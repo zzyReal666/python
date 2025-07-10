@@ -7,72 +7,74 @@
 
 import importlib
 import inspect
-from typing import Dict, List, Type, Optional
-from pathlib import Path
 import logging
+from pathlib import Path
+from typing import Dict, List, Optional, Type
 
 from .base_app import BaseApp
 
 
 class AppManager:
     """应用管理器"""
-    
+
     def __init__(self):
         self.apps: Dict[str, Type[BaseApp]] = {}
         self.logger = logging.getLogger("app_manager")
         self._discover_apps()
-    
+
     def _discover_apps(self) -> None:
         """自动发现所有应用"""
         apps_dir = Path(__file__).parent.parent / "apps"
-        
+
         for app_file in apps_dir.glob("*.py"):
             if app_file.name.startswith("__"):
                 continue
-                
+
             try:
                 # 动态导入模块
                 module_name = f"apps.{app_file.stem}"
                 module = importlib.import_module(module_name)
-                
+
                 # 查找继承自 BaseApp 的类
                 for name, obj in inspect.getmembers(module):
-                    if (inspect.isclass(obj) and 
-                        issubclass(obj, BaseApp) and 
-                        obj != BaseApp):
+                    if (
+                        inspect.isclass(obj)
+                        and issubclass(obj, BaseApp)
+                        and obj != BaseApp
+                    ):
                         self.register_app(name, obj)
                         self.logger.info(f"发现应用: {name}")
-                        
+
             except Exception as e:
                 self.logger.warning(f"加载应用 {app_file.name} 失败: {e}")
-    
+
     def register_app(self, name: str, app_class: Type[BaseApp]) -> None:
         """
         注册应用
-        
+
         Args:
             name: 应用名称
             app_class: 应用类
         """
         self.apps[name] = app_class
         self.logger.info(f"注册应用: {name}")
-    
+
     def get_app(self, name: str) -> Optional[Type[BaseApp]]:
         """
         获取应用类
-        
+
         Args:
             name: 应用名称
-            
+
         Returns:
             应用类或 None
         """
         return self.apps.get(name)
-    
+
     def list_apps(self) -> List[Dict[str, str]]:
         """
         列出所有应用
-        
+
         Returns:
             应用信息列表
         """
@@ -82,25 +84,25 @@ class AppManager:
             try:
                 temp_app = app_class()
                 info = temp_app.get_info()
-                app_list.append({
-                    "name": name,
-                    "description": info.get("description", ""),
-                    "version": info.get("version", "1.0.0")
-                })
+                app_list.append(
+                    {
+                        "name": name,
+                        "description": info.get("description", ""),
+                        "version": info.get("version", "1.0.0"),
+                    }
+                )
             except Exception as e:
                 self.logger.warning(f"获取应用 {name} 信息失败: {e}")
-                app_list.append({
-                    "name": name,
-                    "description": "获取信息失败",
-                    "version": "unknown"
-                })
-        
+                app_list.append(
+                    {"name": name, "description": "获取信息失败", "version": "unknown"}
+                )
+
         return app_list
-    
+
     def run_app(self, name: str, **kwargs) -> None:
         """
         运行指定应用
-        
+
         Args:
             name: 应用名称
             **kwargs: 运行参数
@@ -109,7 +111,7 @@ class AppManager:
         if not app_class:
             self.logger.error(f"应用 {name} 不存在")
             return
-        
+
         try:
             # 直接实例化应用类
             app = app_class()
@@ -124,32 +126,32 @@ class AppManager:
                 app.cleanup()
             except:
                 pass
-    
+
     def create_app_template(self, name: str, app_type: str = "gradio") -> None:
         """
         创建新应用模板
-        
+
         Args:
             name: 应用名称
             app_type: 应用类型 (gradio/console)
         """
         apps_dir = Path(__file__).parent.parent / "apps"
         template_file = apps_dir / f"{name.lower()}_app.py"
-        
+
         if template_file.exists():
             self.logger.error(f"应用文件 {template_file} 已存在")
             return
-        
+
         if app_type == "gradio":
             template = self._get_gradio_template(name)
         else:
             template = self._get_console_template(name)
-        
-        with open(template_file, 'w', encoding='utf-8') as f:
+
+        with open(template_file, "w", encoding="utf-8") as f:
             f.write(template)
-        
+
         self.logger.info(f"创建应用模板: {template_file}")
-    
+
     def _get_gradio_template(self, name: str) -> str:
         """获取 Gradio 应用模板"""
         return f'''#!/usr/bin/env python3
@@ -210,7 +212,7 @@ app = {name}App()
 if __name__ == "__main__":
     app.run()
 '''
-    
+
     def _get_console_template(self, name: str) -> str:
         """获取控制台应用模板"""
         return f'''#!/usr/bin/env python3
@@ -254,4 +256,4 @@ if __name__ == "__main__":
 
 
 # 全局应用管理器实例
-app_manager = AppManager() 
+app_manager = AppManager()
