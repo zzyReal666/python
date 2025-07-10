@@ -1,0 +1,46 @@
+{
+    "python.defaultInterpreterPath": "./.venv/bin/python",
+    "python.terminal.activateEnvironment": true,
+    "python.terminal.activateEnvInCurrentTerminal": true,
+    "python.linting.enabled": true,
+    "python.linting.flake8Enabled": true,
+    "python.linting.mypyEnabled": true,
+    "python.formatting.provider": "black",
+    "python.formatting.blackArgs": [
+        "--line-length=88"
+    ],
+    "python.sortImports.args": [
+        "--profile=black",
+        "--line-length=88"
+    ],
+    "python.testing.pytestEnabled": true,
+    "python.testing.pytestArgs": [
+        "tests"
+    ],
+    "python.analysis.extraPaths": [
+        "./src"
+    ],
+    "python.analysis.autoImportCompletions": true,
+    "python.analysis.typeCheckingMode": "basic",
+    "files.exclude": {
+        "**/__pycache__": true,
+        "**/*.pyc": true,
+        "**/.pytest_cache": true,
+        "**/.mypy_cache": true,
+        "**/.coverage": true,
+        "**/htmlcov": true,
+        "**/.venv": false
+    },
+    "search.exclude": {
+        "**/__pycache__": true,
+        "**/*.pyc": true,
+        "**/.pytest_cache": true,
+        "**/.mypy_cache": true,
+        "**/.venv": true
+    },
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+        "source.organizeImports": "explicit"
+    },
+    "python.envFile": "${workspaceFolder}/.env"
+}

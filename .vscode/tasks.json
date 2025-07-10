@@ -1,0 +1,139 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "安装依赖",
+            "type": "shell",
+            "command": "${workspaceFolder}/.venv/bin/pip",
+            "args": [
+                "install",
+                "-r",
+                "requirements.txt"
+            ],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "运行日志演示",
+            "type": "shell",
+            "command": "${workspaceFolder}/.venv/bin/python",
+            "args": [
+                "src/main.py",
+                "run",
+                "logging_demo"
+            ],
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "运行 TestApp 模块",
+            "type": "shell",
+            "command": "${workspaceFolder}/.venv/bin/python",
+            "args": [
+                "src/main.py",
+                "run",
+                "testapp"
+            ],
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "代码质量检查",
+            "type": "shell",
+            "command": "make",
+            "args": [
+                "lint"
+            ],
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "运行测试",
+            "type": "shell",
+            "command": "make",
+            "args": [
+                "test"
+            ],
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "格式化代码",
+            "type": "shell",
+            "command": "make",
+            "args": [
+                "format"
+            ],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Docker 构建",
+            "type": "shell",
+            "command": "make",
+            "args": [
+                "docker-build"
+            ],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "项目状态检查",
+            "type": "shell",
+            "command": "make",
+            "args": [
+                "status"
+            ],
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        }
+    ]
+}
